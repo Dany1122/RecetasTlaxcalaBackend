@@ -14,7 +14,9 @@ mongoose.connect(process.env.MONGO_URI)
     .then(() => console.log("Conectado a MongoDB"))
     .catch(err => console.error(err));
 
-const authRoutes = require('./routes/auth');
+app.use('/uploads', express.static('uploads'));
+
+    const authRoutes = require('./routes/auth');
 app.use('/api/auth', authRoutes);
 
 const recipesRoutes = require('./routes/recipes');

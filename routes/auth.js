@@ -2,6 +2,7 @@ const express = require('express');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const User = require('../models/User');
+const auth = require('../middlewares/auth');
 
 const router = express.Router();
 
@@ -34,6 +35,15 @@ router.post('/login', async (req, res) => {
     res.json({ token, user: { id: user._id, nombre: user.nombre, rol: user.rol } });
   } catch (err) {
     res.status(500).json({ error: err.message });
+  }
+});
+
+router.get('/perfil', auth, async (req, res) => {
+  try {
+    const user = await User.findById(req.user.id).select('-password');
+    res.json(user);
+  } catch (err) {
+    res.status(500).json({ error: 'Error al obtener el perfil' });
   }
 });
 
